@@ -10,7 +10,7 @@ const path=require("path")
 const app=express()
 
 
-const PORT=4000
+const PORT= process.env.PORT || 4000
 dotEnv.config();
 mongoose.connect(process.env.MONGO_URI).then(()=>console.log('mongo db is  connected')).catch((error)=>console.log(error))
 
@@ -24,6 +24,6 @@ app.listen(PORT,()=>{
     console.log(`Server is running on ${PORT}`)
 })
 
-app.use('/home',(req,res)=>{
-    res.send("<h1>this is home</h1>")
+app.use('/',(req,res)=>{
+    res.send("<h1>Welcome to node js api </h1>")
 })
