@@ -23,7 +23,10 @@ const addFirm=async(req,res)=>{
 
     const vendor=await Vendor.findById(req.vendorId)
     if(!vendor){
-        res.status(500).json({message:'vendor not found'}) 
+        res.status(404).json({message:'vendor not found'}) 
+    }
+    if(vendor.firm.length > 0){
+        return res.status(400).json({message:"vendor only have one firm only"})
     }
     const firm=new Firm({
         firmName,
@@ -36,9 +39,11 @@ const addFirm=async(req,res)=>{
     })
 
     const savedFirm=await firm.save();
+    const firmId=savedFirm._id
     vendor.firm.push(savedFirm)
     await vendor.save()
-    return res.status(200).json({message:'firm add sussessfully'})
+    
+    return res.status(200).json({message:'firm add sussessfully',firmId})
     } catch (error) {
         console.log(error)
         res.status(500).json({error:'internal server error'})

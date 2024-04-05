@@ -43,8 +43,11 @@ const vendorLogin=async(req,res)=>{
         if(!vendor || !(await bcrypt.compare(password,vendor.password))){
             return res.status(401).json({error:"invalid username or pass"})
         }
+        
         const token=jwt.sign({vendorId:vendor._id},secretKey,{expiresIn:"1h"})
-        res.status(200).json({success:'login success',token})
+        const vendorId=vendor._id
+        console.log("this is the vendor login id",vendorId)
+        res.status(200).json({success:'login success',token,vendorId})
         console.log(email,token);
     } catch (error) {
         console.log(error);
@@ -68,7 +71,9 @@ const getVendorById=async(req,res)=>{
         if(!vendor){
             return res.status(404).json({message:'not found'})
         }
-        res.status(200).json({vendor})
+        const vendorFirmId=vendor.firm[0]._id;
+        res.status(200).json({vendor,vendorFirmId})
+        console.log("this is firm id to frontend",vendorFirmId)
         
     } catch (error) {
         console.log(error)
